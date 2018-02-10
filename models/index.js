@@ -4,3 +4,7 @@ mongoose.connect(
     process.env.MONGODB_URI ||
     'mongodb://localhost/my-api'
 );
+
+let Player = require('./player')
+
+module.exports.Player = Player
