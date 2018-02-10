@@ -16,23 +16,23 @@ app.use(bodyParser.urlencoded({
 }));
 
 // get all
-app.get('api/players', (req, res) => {
+app.get('/api/players', (req, res) => {
 });
 
 // get one
-app.get('', (req, res) => {
+app.get('/api/players/:id', (req, res) => {
 });
 
 // create new 
-app.post('', (req, res) => {
+app.post('/api/players', (req, res) => {
 });
 
 // delete one
-app.delete('', (req, res) => {
+app.delete('/api/players/:id', (req, res) => {
 });
 
 // update one
-app.put('', (req, res) => {
+app.put('/api/players/:id', (req, res) => {
 });
 
 // This is where we serve our API!
