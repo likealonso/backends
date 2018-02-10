@@ -17,10 +17,28 @@ app.use(bodyParser.urlencoded({
 
 // get all
 app.get('/api/players', (req, res) => {
+    db.Player.find((err, allPlayers) => {
+        if (err){
+            console.log(`index error: ${err}`)
+        } else {
+            res.json({
+                players: allPlayers
+            })
+        }
+    })
 });
 
 // get one
 app.get('/api/players/:id', (req, res) => {
+    db.Player.findOne({
+        _id: req.params.id
+    }), (err, player) => {
+        if (err) {
+            console.log(`show error: ${err}`)
+        } else {
+            res.json(player)
+        }
+    }
 });
 
 // create new 
