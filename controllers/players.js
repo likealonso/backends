@@ -1,90 +1,77 @@
-let Player = require('../models/player')
-// get all
-function getAllPlayers (req, res) {
-    Player.find((err, allPlayers) => {
-        if (err){
-            console.log(`index error: ${err}`)
-        } else {
-            res.json({
-                players: allPlayers
-            })
-        }
-    })
-};
+var Player = require('../models/player');
 
-// get one
-function getOnePlayer (req, res) {
-    Player.findOne({
-        _id: req.params.id
-    }, (err, player) => {
+function index (req,res) {
+    Player.find({}, function(err, players){
         if (err) {
-            console.log(`show error: ${err}`)
+            console.log(`err occurred ${err}`)
         } else {
-            res.json(player)
+        res.render('players/index', { players })
         }
-    })
-};
+    });
+}
 
-// create new 
-function createPlayer (req, res) {
-    let newPlayer = new Player(req.body);
-    newPlayer.save((err, player) => {
-        if (err) {
-            console.log(`save error: ${err}`)
-        } else {
-            console.log(`saved new player!: ${player.name}`);
-            res.json(player)
-        }
-    })
-};
+function newPlayer (req, res) {
+    res.render('players/new');
+}
 
-// delete one
-function deletePlayer (req, res) {
-    let playerId = req.params.id;
-    Player.findOneAndRemove({
-        _id: playerId
-    })
-    .populate('player')
-    .exec((err, deletedPlayer) => {
-        res.json(deletedPlayer)
-    })
-};
+function create(req, res){
+var player= new Player(req.body);
+player.save(function(err){
 
-// update one
-function updatePlayer (req, res) {
-    let playerId = req.params.id;
-    Player.findOne({
-        _id: playerId
-    }, (err, foundPlayer) => {
-        if (err) {
-            console.log(`could not find the player`)
-        } else {
-            foundPlayer.name = req.body.name || foundPlayer.name;
-            foundPlayer.sport = req.body.sport || foundPlayer.sport;
-            foundPlayer.team = req.body.team || foundPlayer.team;
-            foundPlayer.jersey = req.body.jersey || foundPlayer.jersey;
-            foundPlayer.star = req.body.star || foundPlayer.star;
-            foundPlayer.imageUrl = req.body.imageUrl || foundPlayer.imageUrl;
-            console.log(`updating ${foundPlayer.name}`);
-            // save it
-            foundPlayer.save((err, player) => {
-                if (err) {
-                    console.log(`update error ${err}`)
-                } else {
-                    console.log(`updated player ${player.name}`);
-                    res.json(player)
-                }
-            })
+    if (err) return res.render('players/new');
+    console.log(player);
 
-        }
+    res.redirect('/players');
+});
+}
+
+function bye (req, res){
+    Player.findByIdAndRemove(req.params.id, function(err){
+    res.redirect('/players')
+    });
+    
+}
+
+function edit(req,res){
+    Player.findById(req.params.id, function(err, player) {
+        console.log('movie =', movie)
+        res.render('player/edit', { player });
+    });
+    
+}
+
+function update(req, res){
+    console.log('HELLLOOOOO!!!!!!')
+    // Movie.findById(req.params.id, function (err, movie) {
+    //     if (err) console.log('handle err', err)
+    //     if (req.body.title) movie.title = req.body.title
+    //     if (req.body.rating) movie.rating = req.body.rating
+
+    //     movie.save(function (err, movie) {
+    //         if (err) console.log('handle me ', err)
+    //         res.redirect('/movies')
+    //     })
+
+    // });
+
+    Player.findByIdAndUpdate(req.params.id, req.body, function(err, player){
+        res.redirect('/players')
     })
 
-};
+}
+
+function show(req, res) {
+    Player.findById(req.params.id, function(err, player){
+        res.render('players/show', { player })
+    });
+}
 
 module.exports = {
-    getAllPlayers,
-    getOnePlayer,
-    createPlayer,
-    updatePlayer,
-    deletePlayer
-}
+    index,
+    new: newPlayer,
+    create,
+    destroy: bye,
+    edit,
+    update,
+    show
+};

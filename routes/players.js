@@ -1,11 +1,21 @@
 var express = require('express');
 var router = express.Router();
-var playersCtrl = require('../controllers/players')
+var ballersCtrl = require('../controllers/players')
+/* GET users listing. */
 
-router.get('/', playersCtrl.getAllPlayers);
-router.get('/:id', playersCtrl.getOnePlayer);
-router.post('/', playersCtrl.createPlayer);
-router.put('/:id', playersCtrl.updatePlayer);
-router.delete('/:id', playersCtrl.deletePlayer);
+// GET /players
+router.get('/', ballersCtrl.index);
+//GET/players/new
+router.get('/new', ballersCtrl.new);
+// POST /players
+router.post('/', ballersCtrl.create);
+// DELETE /players/:id
+router.delete('/:id', ballersCtrl.destroy);
+// GET /players/:id/edit
+router.get('/:id/edit', ballersCtrl.edit);
+//PUT /players/:id
+router.put('/:id', ballersCtrl.update);
+
+router.get('/:id', ballersCtrl.show);
 
 module.exports = router;
